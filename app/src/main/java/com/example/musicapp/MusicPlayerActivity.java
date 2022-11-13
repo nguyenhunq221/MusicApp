@@ -14,31 +14,33 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.musicapp.databinding.ActivityMainBinding;
+
 import java.io.IOException;
 
 public class MusicPlayerActivity extends AppCompatActivity {
-    ImageView imgcd;
-    Button btnPlay;
-    TextView txtTime,txtDuration,txtSong,txtSinger;
-    SeekBar skTime;
-    MediaPlayer musicPlayer;
-    Animation animation;
+      private ActivityMainBinding binding;
+//    ImageView imgcd;
+//    Button btnPlay;
+//    TextView txtTime,txtDuration,txtSong,txtSinger;
+//    SeekBar skTime;
+      MediaPlayer musicPlayer;
+      Animation animation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-//        getSupportActionBar().hide(); //hide the actionbar(ten app)
+//      getSupportActionBar().hide(); //hide the actionbar(ten app)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Song song =(Song) getIntent().getSerializableExtra("song");
 
-        Anhxa();
-
         animation= AnimationUtils.loadAnimation(this, R.anim.rotate);
 
-        txtSong.setText((song.getTitle()));
-        txtSinger.setText(song.getArtist());
+        binding.txtSong.setText((song.getTitle()));
+        binding.txtSinger.setText(song.getArtist());
 
         musicPlayer = new MediaPlayer();
         try {
@@ -51,29 +53,29 @@ public class MusicPlayerActivity extends AppCompatActivity {
         musicPlayer.seekTo(0); // nhay den gia tri bat dau lap lai
 
         String duration = milisecondsToString(musicPlayer.getDuration());
-        txtDuration.setText(duration);
+        binding.txtDuration.setText(duration);
 
-        btnPlay.setOnClickListener(new View.OnClickListener() {
+        binding.btnplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(musicPlayer.isPlaying()){
                     musicPlayer.pause();
-                    btnPlay.setBackgroundResource(R.drawable.play);
-                    imgcd.clearAnimation();
+                    binding.btnplay.setBackgroundResource(R.drawable.play);
+                    binding.imgcd.clearAnimation();
 
                 }
                 else{
                     musicPlayer.start();
-                    btnPlay.setBackgroundResource(R.drawable.pause);
-                    imgcd.startAnimation(animation);
+                    binding.btnplay.setBackgroundResource(R.drawable.pause);
+                    binding.imgcd.startAnimation(animation);
 
 
                 }
             }
         });
 
-        skTime.setMax(musicPlayer.getDuration());
-        skTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.skTime.setMax(musicPlayer.getDuration());
+        binding.skTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
@@ -86,7 +88,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                    musicPlayer.seekTo(skTime.getProgress());
+                    musicPlayer.seekTo(binding.skTime.getProgress());
             }
         });
         new Thread(new Runnable() {
@@ -101,8 +103,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        txtTime.setText(elapsedTime);
-                                        skTime.setProgress((int) current);
+                                        binding.txtTime.setText(elapsedTime);
+                                        binding.skTime.setProgress((int) current);
                                     }
                                 });
                                 Thread.sleep(1000);
@@ -128,15 +130,7 @@ public class MusicPlayerActivity extends AppCompatActivity {
         return  elapsedTime;
     }
 
-    public  void Anhxa(){
-        btnPlay =       (Button) findViewById(R.id.btnplay);
-        txtDuration =   (TextView) findViewById(R.id.txt_duration);
-        txtTime =       (TextView) findViewById(R.id.txt_time);
-        skTime =        (SeekBar) findViewById(R.id.sk_time);
-        txtSong=        (TextView) findViewById(R.id.txt_song);
-        txtSinger=        (TextView) findViewById(R.id.txt_singer);
-        imgcd = (ImageView) findViewById(R.id.imgcd);
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/txt_song"
-            android:text="Chưa quên người yêu cũ"
+            android:text="Faded"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/txt_singer"
-            android:text="-Hà Nhi-"
+            android:text="Alan Walker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
@@ -92,14 +92,14 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/play"
         />
-    <com.gauravk.audiovisualizer.visualizer.BlastVisualizer
-        xmlns:custom="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/blast"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        custom:avDensity="0.8"
-        custom:avType="fill"
-        custom:avColor="@color/av_dark_blue"
-        custom:avSpeed="normal"/>
+<!--    <com.gauravk.audiovisualizer.visualizer.BlastVisualizer-->
+<!--        xmlns:custom="http://schemas.android.com/apk/res-auto"-->
+<!--        android:id="@+id/blast"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        custom:avDensity="0.8"-->
+<!--        custom:avType="fill"-->
+<!--        custom:avColor="@color/av_dark_blue"-->
+<!--        custom:avSpeed="normal"/>-->
 
 </LinearLayout>
