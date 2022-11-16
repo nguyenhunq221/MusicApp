@@ -15,7 +15,7 @@ import java.util.List;
 public class SongAdapter extends ArrayAdapter <Song>{
 
 
-    private int resource;
+//    private int resource;
     public SongAdapter(@NonNull Context context, @NonNull List<Song> objects) {
         super(context, 0, objects);
     }

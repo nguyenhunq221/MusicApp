@@ -20,12 +20,9 @@ import java.io.IOException;
 
 public class MusicPlayerActivity extends AppCompatActivity {
       private ActivityMainBinding binding;
-//    ImageView imgcd;
-//    Button btnPlay;
-//    TextView txtTime,txtDuration,txtSong,txtSinger;
-//    SeekBar skTime;
       MediaPlayer musicPlayer;
       Animation animation;
+      int position =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,18 +57,26 @@ public class MusicPlayerActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(musicPlayer.isPlaying()){
                     musicPlayer.pause();
-                    binding.btnplay.setBackgroundResource(R.drawable.play);
+                    binding.btnplay.setBackgroundResource(R.drawable.ic_baseline_play_arrow_24);
                     binding.imgcd.clearAnimation();
 
                 }
                 else{
                     musicPlayer.start();
-                    binding.btnplay.setBackgroundResource(R.drawable.pause);
+                    binding.btnplay.setBackgroundResource(R.drawable.ic_baseline_pause_24);
                     binding.imgcd.startAnimation(animation);
 
 
                 }
             }
+        });
+
+        binding.btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+
         });
 
         binding.skTime.setMax(musicPlayer.getDuration());
@@ -97,8 +102,8 @@ public class MusicPlayerActivity extends AppCompatActivity {
                 while (musicPlayer != null ){
                     if ((musicPlayer.isPlaying())){
                         try{
-                                final double current = musicPlayer.getCurrentPosition();
-                                final  String elapsedTime=milisecondsToString((int) current);
+                                final double current      =  musicPlayer.getCurrentPosition();
+                                final  String elapsedTime =  milisecondsToString((int) current);
 
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -143,10 +148,6 @@ public class MusicPlayerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void startAnimation(View view, int animId){
-//        Animation animation= AnimationUtils.loadAnimation(this, animId);
-//        view.startAnimation(animation);
-//    }
 
 
 }
