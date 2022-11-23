@@ -3,14 +3,25 @@ package com.example.musicapp;
 import java.io.Serializable;
 
 public class Song implements Serializable {
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     String title;
     String Artist;
     String path;
 
-    public Song(String title, String artist, String path) {
+    public Song(String title, String artist, String path,int id) {
         this.title = title;
         Artist = artist;
         this.path = path;
+        this.id = id;
     }
 
     public String getTitle() {

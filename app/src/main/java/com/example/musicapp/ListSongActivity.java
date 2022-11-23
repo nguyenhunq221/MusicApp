@@ -36,11 +36,9 @@ public class ListSongActivity extends AppCompatActivity {
         lvSongs = findViewById(R.id.lvSongs);
         songArrayList = new ArrayList<>();
 
-        songsAdapter =new SongAdapter(this,songArrayList);
+        songsAdapter = new SongAdapter(this,songArrayList);
 
         lvSongs.setAdapter(songsAdapter);
-//            for(int i=1; i<=10; i++)
-//            songArrayList.add( new Song("Song "+i,"Artist "+i,"Path "+i));
 
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
 
@@ -54,9 +52,8 @@ public class ListSongActivity extends AppCompatActivity {
         lvSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Song song = songArrayList.get(position);
-                Intent openMusicPlayer=new Intent(ListSongActivity.this,MusicPlayerActivity.class);
-                openMusicPlayer.putExtra("song",song);
+                Intent openMusicPlayer = new Intent(ListSongActivity.this,MusicPlayerActivity.class);
+                openMusicPlayer.putExtra("song_index", position);
 
                 startActivity(openMusicPlayer);
             }
@@ -84,15 +81,16 @@ public class ListSongActivity extends AppCompatActivity {
             int indexTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int indexArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
             int indexData = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-
+            int indexId = songCursor.getColumnIndex(MediaStore.Audio.Media._ID);
 
 
             do{
                 String title = songCursor.getString(indexTitle);
                 String artist = songCursor.getString(indexArtist);
                 String path = songCursor.getString(indexData);
-                Song song = new Song(title,artist,path);
-                songArrayList.add(new Song(title,artist,path));
+                int id = songCursor.getInt(indexId);
+                Song song = new Song(title,artist,path, id);
+                songArrayList.add(song);
             }while (songCursor.moveToNext());
         }
         songsAdapter.notifyDataSetChanged();

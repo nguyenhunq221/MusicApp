@@ -9,7 +9,11 @@
     android:padding="16dp"
     android:background="@drawable/background"
     >
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:orientation="vertical"
+        android:layout_gravity="center">
         <TextView
             android:id="@+id/txt_song"
             android:text="Faded"
@@ -35,6 +39,7 @@
             android:textStyle="italic"
             android:layout_marginBottom="10dp"
             />
+    </LinearLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgcd"
@@ -85,24 +90,25 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_gravity="center">
 
         <Button
             android:id="@+id/btnPre"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_width="54dp"
+            android:layout_height="37dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/ic_baseline_skip_previous_24" />
 
         <Button
 
             android:id="@+id/btnplay"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_width="54dp"
+            android:layout_height="37dp"
             android:layout_gravity="center"
             android:background="@drawable/ic_baseline_play_arrow_24"
 
@@ -110,22 +116,15 @@
 
         <Button
             android:id="@+id/btnNext"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_width="54dp"
+            android:layout_height="37dp"
             android:layout_marginLeft="20dp"
             android:background="@drawable/ic_baseline_skip_next_24" />
 
 
+
+
     </LinearLayout>
 
-<!--    <com.gauravk.audiovisualizer.visualizer.BlastVisualizer-->
-<!--        xmlns:custom="http://schemas.android.com/apk/res-auto"-->
-<!--        android:id="@+id/blast"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        custom:avDensity="0.8"-->
-<!--        custom:avType="fill"-->
-<!--        custom:avColor="@color/av_dark_blue"-->
-<!--        custom:avSpeed="normal"/>-->
 
 </LinearLayout>

@@ -18,51 +18,67 @@ import com.example.musicapp.databinding.ActivityMainBinding;
 
 import java.io.IOException;
 
-public class MusicPlayerActivity extends AppCompatActivity {
+public class MusicPlayerActivity extends ListSongActivity {
+
       private ActivityMainBinding binding;
-      MediaPlayer musicPlayer;
       Animation animation;
-      int position =0;
+      MusicController mMusicController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        mMusicController = new MusicController(this, new MusicController.MusicSource() {
+            @Override
+            public Song getAtIndex(int index) {
+                return songArrayList.get(index);
+            }
+
+            @Override
+            public int getSize() {
+                return songArrayList.size();
+            }
+
+            @Override
+            public void onDonePrepare() {
+                binding.skTime.setMax(mMusicController.getDuration());
+                String duration = milisecondsToString(mMusicController.getDuration());
+                binding.txtDuration.setText(duration);
+            }
+        });
+
 //      getSupportActionBar().hide(); //hide the actionbar(ten app)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Song song =(Song) getIntent().getSerializableExtra("song");
-
+        int songIndex = getIntent().getIntExtra("song_index", 0);
+        Song song = songArrayList.get(songIndex);
         animation= AnimationUtils.loadAnimation(this, R.anim.rotate);
 
         binding.txtSong.setText((song.getTitle()));
         binding.txtSinger.setText(song.getArtist());
 
-        musicPlayer = new MediaPlayer();
-        try {
-            musicPlayer.setDataSource(song.getPath());
-            musicPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        musicPlayer.setLooping(true); //lap lai
-        musicPlayer.seekTo(0); // nhay den gia tri bat dau lap lai
+        mMusicController.playSongAt(songIndex);
+        binding.imgcd.startAnimation(animation);
+        binding.btnplay.setBackgroundResource(R.drawable.ic_baseline_pause_24);
 
-        String duration = milisecondsToString(musicPlayer.getDuration());
-        binding.txtDuration.setText(duration);
+        mMusicController.setLooping(true);
+        mMusicController.seekTo(0);
+
+
 
         binding.btnplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(musicPlayer.isPlaying()){
-                    musicPlayer.pause();
+                if(mMusicController.isPlaying()){
+                    mMusicController.pause();
                     binding.btnplay.setBackgroundResource(R.drawable.ic_baseline_play_arrow_24);
                     binding.imgcd.clearAnimation();
 
                 }
                 else{
-                    musicPlayer.start();
+                    mMusicController.start();
                     binding.btnplay.setBackgroundResource(R.drawable.ic_baseline_pause_24);
                     binding.imgcd.startAnimation(animation);
 
@@ -74,12 +90,30 @@ public class MusicPlayerActivity extends AppCompatActivity {
         binding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mMusicController.playNext();
+                Song s = songArrayList.get(mMusicController.getCurrentIndex());
+                binding.txtSong.setText((s.getTitle()));
+                binding.txtSinger.setText(s.getArtist());
+                binding.imgcd.clearAnimation();
+                binding.imgcd.startAnimation(animation);
+                mMusicController.setLooping(true);
             }
 
         });
 
-        binding.skTime.setMax(musicPlayer.getDuration());
+        binding.btnPre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMusicController.playPrev();
+                Song s = songArrayList.get(mMusicController.getCurrentIndex());
+                binding.txtSong.setText((s.getTitle()));
+                binding.txtSinger.setText(s.getArtist());
+                binding.imgcd.clearAnimation();
+                binding.imgcd.startAnimation(animation);
+                mMusicController.setLooping(true);
+            }
+        });
+
         binding.skTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -93,16 +127,16 @@ public class MusicPlayerActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                    musicPlayer.seekTo(binding.skTime.getProgress());
+                    mMusicController.seekTo(binding.skTime.getProgress());
             }
         });
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (musicPlayer != null ){
-                    if ((musicPlayer.isPlaying())){
+                while (mMusicController != null ){
+                    if ((mMusicController.isPlaying())){
                         try{
-                                final double current      =  musicPlayer.getCurrentPosition();
+                                final double current      =  mMusicController.getCurrentPosition();
                                 final  String elapsedTime =  milisecondsToString((int) current);
 
                                 runOnUiThread(new Runnable() {
@@ -136,18 +170,14 @@ public class MusicPlayerActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home);{
             finish();
-            if(musicPlayer.isPlaying()){
-                musicPlayer.stop();
+            if(mMusicController.isPlaying()){
+                mMusicController.pause();
             }
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }
